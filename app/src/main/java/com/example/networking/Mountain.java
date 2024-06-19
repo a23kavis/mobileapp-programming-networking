@@ -11,6 +11,8 @@ public class Mountain extends RecyclerViewItem {
     private String img;
     private int size;
     private int cost;
+    private AuxData auxdata;
+
 
     public Mountain(String ID, String name, String type, String company, String location, String category, int size, int cost, String wiki, String img) {
         super(ID);
@@ -23,6 +25,8 @@ public class Mountain extends RecyclerViewItem {
         this.cost = cost;
         this.wiki = wiki;
         this.img = img;
+        this.auxdata = auxdata;
+
     }
 
     // Getters
@@ -35,4 +39,7 @@ public class Mountain extends RecyclerViewItem {
     public String getImg() { return img; }
     public int getSize() { return size; }
     public int getCost() { return cost; }
+    public AuxData getAuxdata() {
+        return auxdata;
+    }
 }
