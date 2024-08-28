@@ -1,42 +1,45 @@
 
 # Rapport
 
-**Skriv din rapport här!**
 
-_Du kan ta bort all text som finns sedan tidigare_.
+## Report Dugga 5
 
-## Följande grundsyn gäller dugga-svar:
+In this dugga we print data from json and display it with a recyclerview. I have chosen to use picasso as my image loading library as i find it very simple to use.
+In my image I have added some styling to stretch the images to the view width, this works well for images with some height, but smaller images just get stretched. This can be fixed in various ways, however not relevant to the assignment.
+Some of the data entries contain an images, others don't. The ones that do get it printed and the others are simply empty, this could be replaced with a placeholder photo.
 
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
+```java
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        RecyclerViewItem item = items.get(position);
+        if (item instanceof Mountain) {
+            Mountain mountain = (Mountain) item;
+            holder.name.setText(mountain.getName());
+            holder.location.setText("Location: " + mountain.getLocation());
+            holder.size.setText("Height: " + mountain.getSize() + "m");
+            Log.d("RecyclerViewAdapter", "Img URL: " + mountain.getImg());
+            Picasso.get().load(mountain.getAuxdata().getImg()).into(holder.image);
 
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
-
-```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
+        }
     }
-}
 ```
+The viewholder gets the data from the Mountain class via get functions which in turn are grabbed from the JSON via GSON
 
-Bilder läggs i samma mapp som markdown-filen.
+```java
+            Gson gson = new Gson();
 
+Type listType = new TypeToken<ArrayList<Mountain>>() {}.getType();
+// Parse JSON array into list of Mountain objects
+List<Mountain> mountains = gson.fromJson(json, listType);
+
+            if (mountains != null) {
+        items.clear();
+                items.addAll(mountains);
+                adapter.notifyDataSetChanged();
+                Log.e("MainActivity", "Data sent through");
+            } else {
+                    Log.e("MainActivity", "Couldn't read json");
+                Toast.makeText(MainActivity.this, "Failed to parse JSON", Toast.LENGTH_SHORT).show();
+            }
+```
 ![](android.png)
 
-Läs gärna:
-
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
